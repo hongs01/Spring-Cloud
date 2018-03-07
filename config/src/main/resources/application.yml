@@ -1,0 +1,41 @@
+server:
+  port: 8888
+
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    metadata-map:
+      user.name: ${security.user.name}
+      user.password: ${security.user.password}
+  client:
+    service-url:
+      defaultZone: http://user:${REGISTRY_SERVER_PASSWORD:password}@localhost:8761/eureka/
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/qiuwsh/microservice
+          search-paths: config-repo
+          username: qiuwsh                                             # git仓库的账号
+          password: ad19910315                                         # git仓库的密码
+    stream:
+      bindings:
+        publish:
+          destination: topic-test
+      kafka:
+        binder: #指定kafka broker和zookeeper nodes
+          brokers:
+            - 10.1.254.11:6667
+            - 10.1.254.12:6667
+            - 10.1.254.13:6667
+          zkNodes:
+            - 10.1.254.11:2181
+            - 10.1.254.12:2181
+            - 10.1.254.13:2181
+security:
+  user:
+    name: user
+    password: ${CONFIG_SERVER_PASSWORD:password}

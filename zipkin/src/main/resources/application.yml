@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: zipkin
+  cloud:
+    stream:
+      bindings:
+        publish:
+          destination: topic-test
+      kafka:
+        binder: #指定kafka broker和zookeeper nodes
+          brokers:
+            - 10.1.254.11:6667
+            - 10.1.254.12:6667
+            - 10.1.254.13:6667
+          zkNodes:
+            - 10.1.254.11:2181
+            - 10.1.254.12:2181
+            - 10.1.254.13:2181
+
+server:
+  port: 9411
+
+security:
+  user:
+    name: admin
+    password: ${ZIPKIN_SERVER_PASSWORD:admin}

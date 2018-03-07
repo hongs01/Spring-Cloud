@@ -1,0 +1,13 @@
+spring:
+  dubbo:
+    application:
+      name: provider
+#spring.dubbo.registry.address=zookeeper://119.23.59.213:2182
+    registry:
+      address:  multicast://224.5.6.7:1234?unicast=false
+    protocol:
+      name: dubbo
+      port: 20880
+    scan: com.lantaiyuan.microservice.svcb
+    module:
+      name: test

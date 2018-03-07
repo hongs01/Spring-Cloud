@@ -1,0 +1,50 @@
+logging:
+  level:
+    org.springframework.cloud.netflix.zuul.filters.post.SendErrorFilter: error
+
+server:
+  port: 8040
+
+turbine:
+  stream:
+    port: 8041
+
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    metadata-map:
+      user.name: ${security.user.name}
+      user.password: ${security.user.password}
+  client:
+    service-url:
+      defaultZone: http://user:${REGISTRY_SERVER_PASSWORD:password}@localhost:8761/eureka/
+
+spring:
+  cloud:
+    stream:
+      bindings:
+        publish:
+          destination: topic-test
+      kafka:
+        binder: #指定kafka broker和zookeeper nodes
+          brokers:
+            - 10.1.254.11:6667
+            - 10.1.254.12:6667
+            - 10.1.254.13:6667
+          zkNodes:
+            - 10.1.254.11:2181
+            - 10.1.254.12:2181
+            - 10.1.254.13:2181
+  boot:
+    admin:
+      routes:
+        endpoints: env,metrics,trace,dump,jolokia,info,configprops,trace,logfile,refresh,flyway,liquibase,heapdump,loggers,auditevents,hystrix.stream
+      turbine:
+        clusters: default
+        location: http://monitor:${turbine.stream.port}
+
+security:
+  user:
+    name: admin
+    password: ${MONITOR_SERVER_PASSWORD:admin}
